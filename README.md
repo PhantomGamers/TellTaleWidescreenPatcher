@@ -11,6 +11,7 @@ Game Name | Issues
 Batman The Enemy Within - The Telltale Series | Works 100%  
 Batman - The Telltale Series | Two black bars on the top and bottom in the middle of the screen  
 The Walking Dead The Final Season | Works but I haven't played much yet
+The Walking Dead - A New Frontier | Works
 Tales from the Borderlands | Does not work, use Flawless Widescreen
 
 
