@@ -21,13 +21,6 @@ namespace TellTaleWidescreenPatcher
 
         public static void PatchFunction(string path)
         {
-            if (!File.Exists(path + ".bak"))
-                File.Copy(path, path + ".bak");
-            else
-            {
-                File.Delete(path);
-                File.Copy(path + ".bak", path);
-            }
             byte[] exe = File.ReadAllBytes(path);
             var fixPattern = Pattern.Transform("F3 0F 11 05 ?? ?? ?? ?? 74 07 C6 05 ?? ?? ?? ?? 01");
             //var ratioPattern = Pattern.Transform("39 8E E3 3F ?? ?? 00 00 F0");
@@ -43,7 +36,16 @@ namespace TellTaleWidescreenPatcher
                 Form1.SetStatus("Error: Ratio pattern not found. Executable is not supported.", System.Drawing.Color.Red);
             Console.WriteLine("Ratio offsets found: " + ratioOffsets.Count);
             if (ratioOffsets.Count > 0 && fixOffset > 0)
+            {
+                if (!File.Exists(path + ".bak"))
+                    File.Copy(path, path + ".bak");
+                else
+                {
+                    File.Delete(path);
+                    File.Copy(path + ".bak", path);
+                }
                 PatchFile(exe, fixOffset, ratioOffsets, path);
+            }
         }
 
         public static void PatchFile(byte[] exe, long fixOffset, List<long> ratioOffset, string path)
