@@ -39,7 +39,7 @@ namespace TellTaleWidescreenPatcher
                 Form1.SetStatus("Error: Fix pattern not found. Executable is not supported.", System.Drawing.Color.Red);
                 foundFix = false;
             }
-            if (!foundFix || !Pattern.FindAll(exe, ratioPattern, out ratioOffsets))
+            if (foundFix && !Pattern.FindAll(exe, ratioPattern, out ratioOffsets))
                 Form1.SetStatus("Error: Ratio pattern not found. Executable is not supported.", System.Drawing.Color.Red);
             Console.WriteLine("Ratio offsets found: " + ratioOffsets.Count);
             if (ratioOffsets.Count > 0 && fixOffset > 0)
