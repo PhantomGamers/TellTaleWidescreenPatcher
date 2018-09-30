@@ -40,16 +40,18 @@ namespace TellTaleWidescreenPatcher
             if (IsSteamFile(path))
             {
                 Form1.SetStatus("Steam file detected, removing protection...", System.Drawing.Color.YellowGreen);
+                Form1.IncrementProgress(1);
                 if (!ProcessSteamFile(path))
                 {
                     Form1.SetStatus("Error: Could not patch Steam file.", System.Drawing.Color.Red);
+                    Form1.SetProgress(100, System.Drawing.Color.Red);
                     return;
                 }
                 if (File.Exists(path))
                     File.Delete(path);
                 File.Move(path + ".unpacked.exe", path);
                 Form1.SetStatus("Protection removed, checking for pattern match...", System.Drawing.Color.YellowGreen);
-                
+                Form1.IncrementProgress(1);
             }
             Form1.SetStatus("Scanning for offsets...", System.Drawing.Color.YellowGreen);
             byte[] exe = File.ReadAllBytes(path);
@@ -62,10 +64,16 @@ namespace TellTaleWidescreenPatcher
             if (!Pattern.Find(exe, fixPattern, out long fixOffset))
             {
                 Form1.SetStatus("Error: Fix pattern not found. Executable is not supported.", System.Drawing.Color.Red);
+                Form1.SetProgress(100, System.Drawing.Color.Red);
                 foundFix = false;
             }
+            Form1.IncrementProgress(1);
             if (foundFix && !Pattern.FindAll(exe, ratioPattern, out ratioOffsets))
+            {
                 Form1.SetStatus("Error: Ratio pattern not found. Executable is not supported.", System.Drawing.Color.Red);
+                Form1.SetProgress(100, System.Drawing.Color.Red);
+            }
+            Form1.IncrementProgress(1);
             Console.WriteLine("Ratio offsets found: " + ratioOffsets.Count);
             if (ratioOffsets.Count > 0 && fixOffset > 0)
             {
@@ -80,7 +88,6 @@ namespace TellTaleWidescreenPatcher
 
             using (MemoryStream memStream = new MemoryStream(exe))
             {
-                int count = 0;
                 byte[] nop = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 }; // 8 nops for gog
                 byte[] hexRatio = { };
                 if (Form1.GetResolution() == 0)
@@ -94,6 +101,7 @@ namespace TellTaleWidescreenPatcher
                     memStream.Seek(l, SeekOrigin.Begin);
                     memStream.Write(hexRatio, 0, hexRatio.Length);
                     memStream.Seek(0, SeekOrigin.Begin);
+                    Form1.IncrementProgress(1);
                 }
                 Form1.SetStatus("Writing to disk...", System.Drawing.Color.YellowGreen);
                 using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate))

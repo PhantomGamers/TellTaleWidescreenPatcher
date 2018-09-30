@@ -80,9 +80,15 @@ namespace TellTaleWidescreenPatcher
             return index;
         }
 
-        public static void SetProgress(int value)
+        public static void SetProgress(int value, Color? color = null)
         {
-            form.progressBar1.Value = value;
+            form.progressBar1.Invoke((MethodInvoker)(() => { form.progressBar1.Value = value; }));
+            form.progressBar1.Invoke((MethodInvoker)(() => { form.progressBar1.ForeColor = color.GetValueOrDefault(Color.Green); }));
+        }
+
+        public static void IncrementProgress(int value)
+        {
+            form.progressBar1.Invoke((MethodInvoker)(() => { form.progressBar1.Increment(value); }));
         }
 
         private static Form1 form = null;
@@ -91,21 +97,15 @@ namespace TellTaleWidescreenPatcher
         {
             if (!PatchWorker.IsBusy)
             {
-                PatchWorker.WorkerReportsProgress = true;
                 PatchButton.Enabled = false;
                 PatchWorker.RunWorkerAsync();
             }
         }
 
-        private void PatchWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            form.progressBar1.Invoke((MethodInvoker)(() => { form.progressBar1.Value = e.ProgressPercentage; }));
-        }
-
         private void PatchWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             Program.PatchFunction(this.PathBox.Text);
-            form.progressBar1.Invoke((MethodInvoker)(() => { form.progressBar1.Value = 100; }));
+            SetProgress(100);
         }
 
         private void Form1_DragEnter(object sender, DragEventArgs e)
