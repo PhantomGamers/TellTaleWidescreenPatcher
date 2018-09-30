@@ -81,7 +81,7 @@ namespace TellTaleWidescreenPatcher
             using (MemoryStream memStream = new MemoryStream(exe))
             {
                 int count = 0;
-                byte[] nop = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 }; // 8 nops for gog
+                byte[] nop = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 }; // 8 nops for gog
                 byte[] hexRatio = { };
                 if (Form1.GetResolution() == 0)
                     hexRatio = new byte[] { 0x26, 0xB4, 0x17, 0x40 };
