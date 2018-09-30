@@ -92,13 +92,10 @@ namespace TellTaleWidescreenPatcher
             if (!PatchWorker.IsBusy)
             {
                 PatchWorker.WorkerReportsProgress = true;
+                PatchButton.Enabled = false;
                 PatchWorker.RunWorkerAsync();
+                SetStatus("Patching game...", Color.YellowGreen);
             }
-            PatchButton.Enabled = false;
-        }
-
-        private void PatchFunctionWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
         }
 
         private void PatchWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)

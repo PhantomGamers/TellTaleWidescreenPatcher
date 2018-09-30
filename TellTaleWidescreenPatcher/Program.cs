@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using Steamless.Unpacker.Variant31.x64;
+using Steamless.API.Model;
 
 namespace TellTaleWidescreenPatcher
 {
@@ -21,9 +23,25 @@ namespace TellTaleWidescreenPatcher
 
         public static void PatchFunction(string path)
         {
+            CheckBackup(path);
+            if (IsSteamFile(path))
+            {
+                Form1.SetStatus("Steam file detected, removing protection...", System.Drawing.Color.YellowGreen);
+                if (!ProcessSteamFile(path))
+                {
+                    Form1.SetStatus("Error: Could not patch Steam file.", System.Drawing.Color.Red);
+                    return;
+                }
+                if (File.Exists(path))
+                    File.Delete(path);
+                File.Move(path + ".unpacked.exe", path);
+                Form1.SetStatus("Protection removed, checking for pattern match...", System.Drawing.Color.YellowGreen);
+                
+            }
+
             byte[] exe = File.ReadAllBytes(path);
-            //var fixPattern = Pattern.Transform("F3 0F 11 05 ?? ?? ?? ?? 74 07 C6 05 ?? ?? ?? ?? 01"); // gog fix pattern
-            var fixPattern = Pattern.Transform("0F 2E 05 ?? ?? ?? ??");
+            var fixPattern = Pattern.Transform("F3 0F 11 05 ?? ?? ?? ?? 74 07 C6 05 ?? ?? ?? ?? 01"); // gog fix pattern
+            //var fixPattern = Pattern.Transform("0F 2E 05 ?? ?? ?? ??");
             //var ratioPattern = Pattern.Transform("39 8E E3 3F ?? ?? 00 00 F0"); // gog ratio pattern
             var ratioPattern = Pattern.Transform("39 8E E3 3F ?? ??");
             List<long> ratioOffsets = new List<long>();
@@ -38,13 +56,7 @@ namespace TellTaleWidescreenPatcher
             Console.WriteLine("Ratio offsets found: " + ratioOffsets.Count);
             if (ratioOffsets.Count > 0 && fixOffset > 0)
             {
-                if (!File.Exists(path + ".bak"))
-                    File.Copy(path, path + ".bak");
-                else
-                {
-                    File.Delete(path);
-                    File.Copy(path + ".bak", path);
-                }
+                Form1.SetStatus("Offsets found, patching game...", System.Drawing.Color.YellowGreen);
                 PatchFile(exe, fixOffset, ratioOffsets, path);
             }
         }
@@ -76,6 +88,42 @@ namespace TellTaleWidescreenPatcher
                 }
                 File.WriteAllBytes(path, exe);
                 Form1.SetStatus("Game patched!", System.Drawing.Color.Green);
+            }
+        }
+
+        private static bool IsSteamFile(string file)
+        {
+            Main m = new Main();
+            if (m.CanProcessFile(file))
+                return true;
+            else
+                return false;
+        }
+
+        private static bool ProcessSteamFile(string file)
+        {
+            SteamlessOptions s = new SteamlessOptions
+            {
+                VerboseOutput = false,
+                KeepBindSection = false,
+                DumpPayloadToDisk = false,
+                DumpSteamDrmpToDisk = false
+            };
+            Main m = new Main();
+            if (m.ProcessFile(file, s))
+                return true;
+            else
+                return false;
+        }
+
+        private static void CheckBackup(string path)
+        {
+            if (!File.Exists(path + ".bak"))
+                File.Copy(path, path + ".bak");
+            else
+            {
+                File.Delete(path);
+                File.Copy(path + ".bak", path);
             }
         }
     }
