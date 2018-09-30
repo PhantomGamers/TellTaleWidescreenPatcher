@@ -53,19 +53,26 @@ namespace TellTaleWidescreenPatcher
                 Form1.SetStatus("Protection removed, checking for pattern match...", System.Drawing.Color.YellowGreen);
                 Form1.IncrementProgress(1);
             }
-            Form1.SetStatus("Scanning for offsets...", System.Drawing.Color.YellowGreen);
             byte[] exe = File.ReadAllBytes(path);
-            var fixPattern = Pattern.Transform("F3 0F 11 05 ?? ?? ?? ?? 74 07 C6 05 ?? ?? ?? ?? 01"); // gog fix pattern
-            //var fixPattern = Pattern.Transform("0F 2E 05 ?? ?? ?? ??");
-            //var ratioPattern = Pattern.Transform("39 8E E3 3F ?? ?? 00 00 F0"); // gog ratio pattern
+            var fixPattern = Pattern.Transform("F3 0F 11 05 ?? ?? ?? ?? 74 07 C6 05 ?? ?? ?? ?? 01"); // main fix pattern
+            var altfixPattern = Pattern.Transform("F3 0F 11 05 ?? ?? ?? ?? C6 05 ?? ?? ?? ?? 01 5D"); // alternative fix pattern
+            //var ratioPattern = Pattern.Transform("39 8E E3 3F ?? ?? 00 00 F0"); // more specific ratio pattern
             var ratioPattern = Pattern.Transform("39 8E E3 3F ?? ??");
             List<long> ratioOffsets = new List<long>();
+            List<long> fixOffsets = new List<long>();
+            Form1.SetStatus("Scanning for offsets...", System.Drawing.Color.YellowGreen);
             if (!Pattern.Find(exe, fixPattern, out long fixOffset))
             {
-                Form1.SetStatus("Error: Fix pattern not found. Executable is not supported.", System.Drawing.Color.Red);
-                Form1.SetProgress(100, System.Drawing.Color.Red);
-                return;
+                fixOffset = 0;
+                if (!Pattern.Find(exe, altfixPattern, out fixOffset))
+                {
+                    fixOffset = 0;
+                    Form1.SetStatus("Error: Fix pattern not found. Executable is not supported.", System.Drawing.Color.Red);
+                    Form1.SetProgress(100, System.Drawing.Color.Red);
+                    return;
+                }
             }
+            Console.WriteLine("Fix offsets found: " + fixOffsets.Count);
             Form1.IncrementProgress(1);
             if (!Pattern.FindAll(exe, ratioPattern, out ratioOffsets))
             {
@@ -75,17 +82,15 @@ namespace TellTaleWidescreenPatcher
             }
             Form1.IncrementProgress(1);
             Console.WriteLine("Ratio offsets found: " + ratioOffsets.Count);
-            if (ratioOffsets.Count > 0 && fixOffset > 0)
+            if (ratioOffsets.Count > 0 && (fixOffset > 0 || fixOffsets.Count > 0))
             {
                 Form1.SetStatus("Offsets found, patching game...", System.Drawing.Color.YellowGreen);
-                PatchFile(exe, fixOffset, ratioOffsets, path);
+                PatchFile(exe, ratioOffsets, path, fixOffset, fixOffsets);
             }
         }
 
-        public static void PatchFile(byte[] exe, long fixOffset, List<long> ratioOffset, string path)
+        public static void PatchFile(byte[] exe, List<long> ratioOffset, string path, long fixOffset = 0, List<long> fixOffsets = null)
         {
-            //ratioOffset.Clear();
-
             using (MemoryStream memStream = new MemoryStream(exe))
             {
                 byte[] nop = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 }; // 8 nops for gog
@@ -94,8 +99,24 @@ namespace TellTaleWidescreenPatcher
                     hexRatio = new byte[] { 0x26, 0xB4, 0x17, 0x40 };
                 else if (Form1.GetResolution() == 1)
                     hexRatio = new byte[] { 0x8E, 0xE3, 0x18, 0x40 };
-                memStream.Seek(fixOffset, SeekOrigin.Begin);
-                memStream.Write(nop, 0, nop.Length);
+                if (fixOffset > 0)
+                {
+                    Console.WriteLine("Fix offset exists.");
+                    memStream.Seek(fixOffset, SeekOrigin.Begin);
+                    memStream.Write(nop, 0, nop.Length);
+                }
+                else
+                {
+                    Console.WriteLine("Multiple fix offsets found.");
+                    foreach (long l in fixOffsets)
+                    {
+                        memStream.Seek(l, SeekOrigin.Begin);
+                        memStream.Write(nop, 0, nop.Length);
+                        memStream.Seek(0, SeekOrigin.Begin);
+                        Form1.IncrementProgress(1);
+                    }
+                }
+                Form1.IncrementProgress(1);
                 foreach (long l in ratioOffset)
                 {
                     memStream.Seek(l, SeekOrigin.Begin);
@@ -109,7 +130,6 @@ namespace TellTaleWidescreenPatcher
                     memStream.CopyTo(fs);
                     fs.Flush();
                 }
-                File.WriteAllBytes(path, exe);
                 Form1.SetStatus("Game patched!", System.Drawing.Color.Green);
             }
         }
