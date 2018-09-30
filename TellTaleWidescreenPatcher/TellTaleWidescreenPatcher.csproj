@@ -146,6 +146,14 @@
     <PostBuildEvent>if $(ConfigurationName) == Release (
 "$(SolutionDir)packages\ILRepack.2.0.16\tools\ILRepack.exe" /wildcards /out:$(AssemblyName).exe $(AssemblyName).exe *.dll
 del *.dll $(AssemblyName).exe.config $(AssemblyName).pdb
+)
+if $(ConfigurationName) == NoEmbeds (
+del *.config
+rmdir /S /Q $(AssemblyName)
+mkdir $(AssemblyName)
+move *.dll $(AssemblyName)\
+move *.exe $(AssemblyName)\
+powershell Compress-Archive -Path $(AssemblyName)\ -DestinationPath '$(AssemblyName).zip' -Force
 )</PostBuildEvent>
   </PropertyGroup>
 </Project>
