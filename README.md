@@ -15,6 +15,7 @@ Batman The Enemy Within - The Telltale Series | None found
 Tales from the Borderlands | None found
 The Walking Dead - A New Frontier | None found
 The Walking Dead The Final Season | None found
+The Wolf Among Us | None found
 
 
 # Todo/Bugs
