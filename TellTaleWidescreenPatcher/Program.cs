@@ -60,18 +60,18 @@ namespace TellTaleWidescreenPatcher
             //var ratioPattern = Pattern.Transform("39 8E E3 3F ?? ?? 00 00 F0"); // gog ratio pattern
             var ratioPattern = Pattern.Transform("39 8E E3 3F ?? ??");
             List<long> ratioOffsets = new List<long>();
-            bool foundFix = true;
             if (!Pattern.Find(exe, fixPattern, out long fixOffset))
             {
                 Form1.SetStatus("Error: Fix pattern not found. Executable is not supported.", System.Drawing.Color.Red);
                 Form1.SetProgress(100, System.Drawing.Color.Red);
-                foundFix = false;
+                return;
             }
             Form1.IncrementProgress(1);
-            if (foundFix && !Pattern.FindAll(exe, ratioPattern, out ratioOffsets))
+            if (!Pattern.FindAll(exe, ratioPattern, out ratioOffsets))
             {
                 Form1.SetStatus("Error: Ratio pattern not found. Executable is not supported.", System.Drawing.Color.Red);
                 Form1.SetProgress(100, System.Drawing.Color.Red);
+                return;
             }
             Form1.IncrementProgress(1);
             Console.WriteLine("Ratio offsets found: " + ratioOffsets.Count);
