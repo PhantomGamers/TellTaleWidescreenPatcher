@@ -5,6 +5,8 @@ using System.IO;
 using System.Windows.Forms;
 using Steamless.Unpacker.Variant31.x64;
 using Steamless.API.Model;
+using System.Reflection;
+using SharpDisasm;
 
 namespace TellTaleWidescreenPatcher
 {
@@ -19,6 +21,17 @@ namespace TellTaleWidescreenPatcher
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
+            Main m = new Main();
+            SteamlessOptions s = new SteamlessOptions();
+            Vendor sh = new Vendor();
+            string requiredDLLPath0 = Assembly.GetAssembly(m.GetType()).CodeBase.Substring(8);
+            string requiredDLLPath1 = Assembly.GetAssembly(s.GetType()).CodeBase.Substring(8);
+            string requiredDLLPath2 = Assembly.GetAssembly(sh.GetType()).CodeBase.Substring(8);
+            if (!File.Exists(requiredDLLPath0) || !File.Exists(requiredDLLPath1) || !File.Exists(requiredDLLPath2))
+            {
+                MessageBox.Show("Missing dependencies");
+                return;
+            }
         }
 
         public static void PatchFunction(string path)
@@ -38,7 +51,7 @@ namespace TellTaleWidescreenPatcher
                 Form1.SetStatus("Protection removed, checking for pattern match...", System.Drawing.Color.YellowGreen);
                 
             }
-
+            Form1.SetStatus("Scanning for offsets...", System.Drawing.Color.YellowGreen);
             byte[] exe = File.ReadAllBytes(path);
             var fixPattern = Pattern.Transform("F3 0F 11 05 ?? ?? ?? ?? 74 07 C6 05 ?? ?? ?? ?? 01"); // gog fix pattern
             //var fixPattern = Pattern.Transform("0F 2E 05 ?? ?? ?? ??");

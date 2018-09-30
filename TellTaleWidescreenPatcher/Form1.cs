@@ -94,7 +94,6 @@ namespace TellTaleWidescreenPatcher
                 PatchWorker.WorkerReportsProgress = true;
                 PatchButton.Enabled = false;
                 PatchWorker.RunWorkerAsync();
-                SetStatus("Patching game...", Color.YellowGreen);
             }
         }
 
