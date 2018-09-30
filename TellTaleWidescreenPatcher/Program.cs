@@ -95,9 +95,11 @@ namespace TellTaleWidescreenPatcher
                     memStream.Write(hexRatio, 0, hexRatio.Length);
                     memStream.Seek(0, SeekOrigin.Begin);
                 }
-                while (count < memStream.Length)
+                Form1.SetStatus("Writing to disk...", System.Drawing.Color.YellowGreen);
+                using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate))
                 {
-                    exe[count++] = Convert.ToByte(memStream.ReadByte());
+                    memStream.CopyTo(fs);
+                    fs.Flush();
                 }
                 File.WriteAllBytes(path, exe);
                 Form1.SetStatus("Game patched!", System.Drawing.Color.Green);
