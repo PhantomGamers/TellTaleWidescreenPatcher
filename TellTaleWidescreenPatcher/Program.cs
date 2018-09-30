@@ -22,8 +22,9 @@ namespace TellTaleWidescreenPatcher
         public static void PatchFunction(string path)
         {
             byte[] exe = File.ReadAllBytes(path);
-            var fixPattern = Pattern.Transform("F3 0F 11 05 ?? ?? ?? ?? 74 07 C6 05 ?? ?? ?? ?? 01");
-            //var ratioPattern = Pattern.Transform("39 8E E3 3F ?? ?? 00 00 F0");
+            //var fixPattern = Pattern.Transform("F3 0F 11 05 ?? ?? ?? ?? 74 07 C6 05 ?? ?? ?? ?? 01"); // gog fix pattern
+            var fixPattern = Pattern.Transform("0F 2E 05 ?? ?? ?? ??");
+            //var ratioPattern = Pattern.Transform("39 8E E3 3F ?? ?? 00 00 F0"); // gog ratio pattern
             var ratioPattern = Pattern.Transform("39 8E E3 3F ?? ??");
             List<long> ratioOffsets = new List<long>();
             bool foundFix = true;
@@ -55,7 +56,7 @@ namespace TellTaleWidescreenPatcher
             using (MemoryStream memStream = new MemoryStream(exe))
             {
                 int count = 0;
-                byte[] nop = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 };
+                byte[] nop = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 }; // 8 nops for gog
                 byte[] hexRatio = { };
                 if (Form1.GetResolution() == 0)
                     hexRatio = new byte[] { 0x26, 0xB4, 0x17, 0x40 };

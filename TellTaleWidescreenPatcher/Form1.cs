@@ -11,6 +11,9 @@ namespace TellTaleWidescreenPatcher
         public Form1()
         {
             InitializeComponent();
+            this.AllowDrop = true;
+            this.DragEnter += new DragEventHandler(Form1_DragEnter);
+            this.DragDrop += new DragEventHandler(Form1_DragDrop);
             form = this;
         }
 
@@ -107,6 +110,22 @@ namespace TellTaleWidescreenPatcher
         {
             Program.PatchFunction(this.PathBox.Text);
             form.progressBar1.Invoke((MethodInvoker)(() => { form.progressBar1.Value = 100; }));
+        }
+
+        private void Form1_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if (files.Length == 1 && Path.GetExtension(files[0]) == ".exe")
+                    e.Effect = DragDropEffects.Copy;
+            }
+        }
+
+        private void Form1_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            this.PathBox.Text = files[0];
         }
     }
 }
