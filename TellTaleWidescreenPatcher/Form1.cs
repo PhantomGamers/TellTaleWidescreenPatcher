@@ -106,6 +106,7 @@ namespace TellTaleWidescreenPatcher
         {
             Program.PatchFunction(this.PathBox.Text);
             SetProgress(100);
+            this.PatchButton.Enabled = true;
         }
 
         private void Form1_DragEnter(object sender, DragEventArgs e)
