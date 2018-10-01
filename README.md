@@ -16,7 +16,7 @@ Guardians of the Galaxy | None found
 Minecraft - Story Mode | Doesn't work, use Flawless Widescreen's Wolf Among Us patch
 Minecraft Story Mode - Season Two | None found
 Tales from the Borderlands | None found
-The Walking Dead - Michonne | None found
+The Walking Dead - Michonne | Might crash on startup, cause unknown.
 The Walking Dead - A New Frontier | None found
 The Walking Dead The Final Season | None found
 The Wolf Among Us | None found
