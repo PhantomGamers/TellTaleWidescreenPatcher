@@ -13,7 +13,7 @@ Game Name | Issues
 Batman - The Telltale Series | Two black bars on the top and bottom in the middle of the screen  
 Batman The Enemy Within - The Telltale Series | None found
 Guardians of the Galaxy | None found
-Minecraft - Story Mode | Doesn't currently work
+Minecraft - Story Mode | Doesn't work, use Flawless Widescreen's Wolf Among Us patch
 Minecraft Story Mode - Season Two | None found
 Tales from the Borderlands | None found
 The Walking Dead - Michonne | None found
