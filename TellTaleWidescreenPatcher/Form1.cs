@@ -13,7 +13,7 @@ namespace TellTaleWidescreenPatcher
         {
             InitializeComponent();
             Version ver = Assembly.GetEntryAssembly().GetName().Version;
-            this.Text = this.Text + " v" + ver.Major + "." + ver.Minor + "." + ver.Build;
+            this.Text = this.Text + " v" + ver.Major + "." + ver.Minor + (ver.Build.ToString() == "0" ? "" : "."+ver.Build.ToString());
             this.AllowDrop = true;
             this.DragEnter += new DragEventHandler(Form1_DragEnter);
             this.DragDrop += new DragEventHandler(Form1_DragDrop);
