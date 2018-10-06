@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace TellTaleWidescreenPatcher
@@ -11,6 +12,8 @@ namespace TellTaleWidescreenPatcher
         public Form1()
         {
             InitializeComponent();
+            Version ver = Assembly.GetEntryAssembly().GetName().Version;
+            this.Text = this.Text + " v" + ver.Major + "." + ver.Minor + "." + ver.Build;
             this.AllowDrop = true;
             this.DragEnter += new DragEventHandler(Form1_DragEnter);
             this.DragDrop += new DragEventHandler(Form1_DragDrop);
