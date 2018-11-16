@@ -32,5 +32,6 @@ Haven't ran into any myself, please report any issues that you find.
 * [@mrexodia for the pattern scanning code](https://github.com/mrexodia/PatternFinder)  
 * [@atom0s for the Steamless patcher!](https://github.com/atom0s/Steamless)
 * [Armin1702 from WSGF for the inspiration.](http://www.wsgf.org/forums/viewtopic.php?f=95&t=31782)
+* [@RoseTheFlower from WSGF for testing and finding the function for Jurassic Park!](https://github.com/RoseTheFlower)
 * Hardes from the Unofficial Metro Patch discord for helping me test.
 * TellTale for making this necessary in the first place!
