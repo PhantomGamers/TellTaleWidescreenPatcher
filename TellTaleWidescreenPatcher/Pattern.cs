@@ -26,7 +26,9 @@ namespace PatternFinder
             {
                 var ch = pattern[i];
                 if (ch >= '0' && ch <= '9' || ch >= 'A' && ch <= 'F' || ch >= 'a' && ch <= 'f' || ch == '?')
+                {
                     result.Append(ch);
+                }
             }
             return result.ToString();
         }
@@ -34,11 +36,20 @@ namespace PatternFinder
         private static int HexChToInt(char ch)
         {
             if (ch >= '0' && ch <= '9')
+            {
                 return ch - '0';
+            }
+
             if (ch >= 'A' && ch <= 'F')
+            {
                 return ch - 'A' + 10;
+            }
+
             if (ch >= 'a' && ch <= 'f')
+            {
                 return ch - 'a' + 10;
+            }
+
             return -1;
         }
 
@@ -47,7 +58,10 @@ namespace PatternFinder
             pattern = Format(pattern);
             var length = pattern.Length;
             if (length == 0)
+            {
                 return null;
+            }
+
             var result = new List<Byte>((length + 1) / 2);
             if (length % 2 != 0)
             {
@@ -61,9 +75,13 @@ namespace PatternFinder
                 if (ch == '?') //wildcard
                 {
                     if (j == 0)
+                    {
                         newbyte.N1.Wildcard = true;
+                    }
                     else
+                    {
                         newbyte.N2.Wildcard = true;
+                    }
                 }
                 else //hex
                 {
@@ -100,13 +118,17 @@ namespace PatternFinder
             {
                 var n1 = b >> 4;
                 if (n1 != p.N1.Data) //if the data is not equal b doesn't match p.
+                {
                     return false;
+                }
             }
             if (!p.N2.Wildcard) //if not a wildcard we need to compare the data.
             {
                 var n2 = b & 0xF;
                 if (n2 != p.N2.Data) //if the data is not equal b doesn't match p.
+                {
                     return false;
+                }
             }
             return true;
         }
@@ -115,10 +137,15 @@ namespace PatternFinder
         {
             offsetFound = -1;
             if (data == null || pattern == null)
+            {
                 return false;
+            }
+
             var patternSize = pattern.LongLength;
             if (data.LongLength == 0 || patternSize == 0)
+            {
                 return false;
+            }
 
             for (long i = offset, pos = 0; i < data.LongLength; i++)
             {
@@ -154,12 +181,18 @@ namespace PatternFinder
                     Console.WriteLine("size: " + size + " pos: " + pos);
                 }
                 else
+                {
                     break;
+                }
             }
             if (offsetsFound.Count > 0)
+            {
                 return true;
+            }
             else
+            {
                 return false;
+            }
         }
     }
 }

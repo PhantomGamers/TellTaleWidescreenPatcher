@@ -1,16 +1,22 @@
-﻿using PatternFinder;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
-using Steamless.API.Model;
 using System.Reflection;
+using System.Windows.Forms;
+
+using PatternFinder;
+
 using SharpDisasm;
+
+using Steamless.API.Model;
+using Steamless.API.Services;
 
 namespace TellTaleWidescreenPatcher
 {
     internal static class Program
     {
+        private static readonly LoggingService m_LoggingService = new LoggingService();
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -37,7 +43,7 @@ namespace TellTaleWidescreenPatcher
 
         public static void PatchFunction(string path)
         {
-            if(IsFileLocked(path))
+            if (IsFileLocked(path))
             {
                 Form1.SetStatus("Error: Executable is locked. Can't patch.", System.Drawing.Color.Red);
                 Form1.SetProgress(100, System.Drawing.Color.Red);
@@ -55,12 +61,15 @@ namespace TellTaleWidescreenPatcher
                     return;
                 }
                 if (File.Exists(path))
+                {
                     File.Delete(path);
+                }
+
                 File.Move(path + ".unpacked.exe", path);
                 Form1.SetStatus("Protection removed, checking for pattern match...", System.Drawing.Color.YellowGreen);
                 Form1.IncrementProgress(1);
             }
-            if (IsSteamFile86(path))
+            else if (IsSteamFile86(path))
             {
                 Form1.SetStatus("Steam 32-bit file detected, removing protection...", System.Drawing.Color.YellowGreen);
                 Form1.IncrementProgress(1);
@@ -71,7 +80,29 @@ namespace TellTaleWidescreenPatcher
                     return;
                 }
                 if (File.Exists(path))
+                {
                     File.Delete(path);
+                }
+
+                File.Move(path + ".unpacked.exe", path);
+                Form1.SetStatus("Protection removed, checking for pattern match...", System.Drawing.Color.YellowGreen);
+                Form1.IncrementProgress(1);
+            }
+            else if (IsSteamFile20(path))
+            {
+                Form1.SetStatus("Steam 2.0 32-bit file detected, removing protection...", System.Drawing.Color.YellowGreen);
+                Form1.IncrementProgress(1);
+                if (!ProcessSteamFile20(path))
+                {
+                    Form1.SetStatus("Error: Could not patch Steam file.", System.Drawing.Color.Red);
+                    Form1.SetProgress(100, System.Drawing.Color.Red);
+                    return;
+                }
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                }
+
                 File.Move(path + ".unpacked.exe", path);
                 Form1.SetStatus("Protection removed, checking for pattern match...", System.Drawing.Color.YellowGreen);
                 Form1.IncrementProgress(1);
@@ -80,27 +111,36 @@ namespace TellTaleWidescreenPatcher
             var fixPattern = Pattern.Transform("F3 0F 11 05 ?? ?? ?? ?? 74 07 C6 05 ?? ?? ?? ?? 01"); // main fix pattern
             var altfixPattern = Pattern.Transform("F3 0F 11 05 ?? ?? ?? ?? C6 05 ?? ?? ?? ?? 01 5D"); // alternative fix pattern
             var altfixPattern2 = Pattern.Transform("F3 0F 11 05 ?? ?? ?? ?? ?? ?? ?? 7B 07"); // michone fix pattern
+            var altfixPattern3 = Pattern.Transform("D9 1D 90 D6 A8 00"); // jurassic park fix pattern thanks to Rose
             //var ratioPattern = Pattern.Transform("39 8E E3 3F ?? ?? 00 00 F0"); // more specific ratio pattern
-            var ratioPattern = Pattern.Transform("39 8E E3 3F ?? ??");
+            var ratioPattern = Pattern.Transform("39 8E E3 3F");
             List<long> ratioOffsets = new List<long>();
             List<long> fixOffsets = new List<long>();
             Form1.SetStatus("Scanning for offsets...", System.Drawing.Color.YellowGreen);
             Console.WriteLine("Checking pattern 1...");
-            if (!Pattern.Find(exe, altfixPattern2, out long fixOffset))
+            int nops = 8;
+            if (!Pattern.Find(exe, altfixPattern3, out long fixOffset))
             {
-                Console.WriteLine("Checking pattern 2...");
-                if (!Pattern.Find(exe, altfixPattern, out fixOffset))
+                if (!Pattern.Find(exe, altfixPattern2, out fixOffset))
                 {
-                    Console.WriteLine("Checking pattern 3...");
-                    if (!Pattern.Find(exe, fixPattern, out fixOffset))
+                    Console.WriteLine("Checking pattern 2...");
+                    if (!Pattern.Find(exe, altfixPattern, out fixOffset))
                     {
-                        Console.WriteLine("No pattern detected.");
-                        fixOffset = 0;
-                        Form1.SetStatus("Error: Fix pattern not found. Executable is not supported.", System.Drawing.Color.Red);
-                        Form1.SetProgress(100, System.Drawing.Color.Red);
-                        return;
+                        Console.WriteLine("Checking pattern 3...");
+                        if (!Pattern.Find(exe, fixPattern, out fixOffset))
+                        {
+                            Console.WriteLine("No pattern detected.");
+                            fixOffset = 0;
+                            Form1.SetStatus("Error: Fix pattern not found. Executable is not supported.", System.Drawing.Color.Red);
+                            Form1.SetProgress(100, System.Drawing.Color.Red);
+                            return;
+                        }
                     }
                 }
+            }
+            else
+            {
+                nops = 6;
             }
             Form1.IncrementProgress(1);
             if (!Pattern.FindAll(exe, ratioPattern, out ratioOffsets))
@@ -114,20 +154,33 @@ namespace TellTaleWidescreenPatcher
             if (ratioOffsets.Count > 0 && (fixOffset > 0 || fixOffsets.Count > 0))
             {
                 Form1.SetStatus("Offsets found, patching game...", System.Drawing.Color.YellowGreen);
-                PatchFile(exe, ratioOffsets, path, fixOffset, fixOffsets);
+                PatchFile(exe, ratioOffsets, path, fixOffset, fixOffsets, nops);
             }
         }
 
-        public static void PatchFile(byte[] exe, List<long> ratioOffset, string path, long fixOffset = 0, List<long> fixOffsets = null)
+        public static void PatchFile(byte[] exe, List<long> ratioOffset, string path, long fixOffset = 0, List<long> fixOffsets = null, int nops = 8)
         {
             using (MemoryStream memStream = new MemoryStream(exe))
             {
-                byte[] nop = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 }; // 8 nops for gog
+                byte[] nop = { };
+                if (nops == 8)
+                {
+                    nop = new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 }; // 8 nops for gog
+                }
+                else
+                {
+                    nop = new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 }; // 8 nops for gog
+                }
                 byte[] hexRatio = { };
                 if (Form1.GetResolution() == 0)
+                {
                     hexRatio = new byte[] { 0x26, 0xB4, 0x17, 0x40 };
+                }
                 else if (Form1.GetResolution() == 1)
+                {
                     hexRatio = new byte[] { 0x8E, 0xE3, 0x18, 0x40 };
+                }
+
                 if (fixOffset > 0)
                 {
                     Console.WriteLine("Fix offset exists.");
@@ -166,19 +219,43 @@ namespace TellTaleWidescreenPatcher
         private static bool IsSteamFile64(string file)
         {
             Steamless.Unpacker.Variant31.x64.Main m = new Steamless.Unpacker.Variant31.x64.Main();
+            m.Initialize(m_LoggingService);
             if (m.CanProcessFile(file))
+            {
                 return true;
+            }
             else
+            {
                 return false;
+            }
         }
 
         private static bool IsSteamFile86(string file)
         {
             Steamless.Unpacker.Variant31.x86.Main m = new Steamless.Unpacker.Variant31.x86.Main();
+            m.Initialize(m_LoggingService);
             if (m.CanProcessFile(file))
+            {
                 return true;
+            }
             else
+            {
                 return false;
+            }
+        }
+
+        private static bool IsSteamFile20(string file)
+        {
+            Steamless.Unpacker.Variant20.x86.Main m = new Steamless.Unpacker.Variant20.x86.Main();
+            m.Initialize(m_LoggingService);
+            if (m.CanProcessFile(file))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private static bool ProcessSteamFile64(string file)
@@ -192,10 +269,15 @@ namespace TellTaleWidescreenPatcher
             };
 
             Steamless.Unpacker.Variant31.x64.Main m = new Steamless.Unpacker.Variant31.x64.Main();
+            m.Initialize(m_LoggingService);
             if (m.ProcessFile(file, s))
+            {
                 return true;
+            }
             else
+            {
                 return false;
+            }
         }
 
         private static bool ProcessSteamFile86(string file)
@@ -209,16 +291,45 @@ namespace TellTaleWidescreenPatcher
             };
 
             Steamless.Unpacker.Variant31.x86.Main m = new Steamless.Unpacker.Variant31.x86.Main();
+            m.Initialize(m_LoggingService);
             if (m.ProcessFile(file, s))
+            {
                 return true;
+            }
             else
+            {
                 return false;
+            }
+        }
+
+        private static bool ProcessSteamFile20(string file)
+        {
+            SteamlessOptions s = new SteamlessOptions
+            {
+                VerboseOutput = false,
+                KeepBindSection = false,
+                DumpPayloadToDisk = false,
+                DumpSteamDrmpToDisk = false
+            };
+
+            Steamless.Unpacker.Variant20.x86.Main m = new Steamless.Unpacker.Variant20.x86.Main();
+            m.Initialize(m_LoggingService);
+            if (m.ProcessFile(file, s))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private static void CheckBackup(string path)
         {
             if (!File.Exists(path + ".bak"))
+            {
                 File.Copy(path, path + ".bak");
+            }
             else
             {
                 File.Delete(path);
@@ -246,7 +357,9 @@ namespace TellTaleWidescreenPatcher
             finally
             {
                 if (stream != null)
+                {
                     stream.Close();
+                }
             }
 
             //file is not locked

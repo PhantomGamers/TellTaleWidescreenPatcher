@@ -68,6 +68,9 @@
       <HintPath>precompiled\Steamless.API.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Steamless.Unpacker.Variant20.x86">
+      <HintPath>precompiled\Steamless.Unpacker.Variant20.x86.dll</HintPath>
+    </Reference>
     <Reference Include="Steamless.Unpacker.Variant31.x64">
       <HintPath>precompiled\Steamless.Unpacker.Variant31.x64.dll</HintPath>
       <Private>True</Private>

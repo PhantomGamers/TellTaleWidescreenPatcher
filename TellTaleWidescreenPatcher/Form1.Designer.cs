@@ -170,7 +170,7 @@
             this.Controls.Add(this.DescriptionLabel);
             this.Controls.Add(this.TitleLabel);
             this.Name = "Form1";
-            this.Text = "TellTale Widescreen Patcher v1.2.2";
+            this.Text = "TellTale Widescreen Patcher";
             this.ResumeLayout(false);
             this.PerformLayout();
 
