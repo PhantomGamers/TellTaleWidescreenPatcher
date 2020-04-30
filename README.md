@@ -10,7 +10,7 @@ If you get an error, your game is not supported. Please open an issue and tell m
 # Tested Titles 
 Game Name | Issues
 ----------- | -----------
-Batman - The Telltale Series | Two black bars on the top and bottom in the middle of the screen  
+Batman - The Telltale Series | Black bars, [use Rose's Fix as well as this](https://community.pcgamingwiki.com/files/file/1729-batman-the-telltale-series-no-letterbox/)  
 Batman The Enemy Within - The Telltale Series | Played through 100%, works
 Guardians of the Galaxy | Played through 100%, works
 Minecraft - Story Mode | Doesn't work, use Flawless Widescreen's Wolf Among Us patch
