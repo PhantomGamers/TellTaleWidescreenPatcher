@@ -11,8 +11,8 @@ If you get an error, your game is not supported. Please open an issue and tell m
 Game Name | Issues
 ----------- | -----------
 Batman - The Telltale Series | Two black bars on the top and bottom in the middle of the screen  
-Batman The Enemy Within - The Telltale Series | None found
-Guardians of the Galaxy | None found
+Batman The Enemy Within - The Telltale Series | Played through 100%, works
+Guardians of the Galaxy | Played through 100%, works
 Minecraft - Story Mode | Doesn't work, use Flawless Widescreen's Wolf Among Us patch
 Minecraft Story Mode - Season Two | None found
 Tales from the Borderlands | Doesn't work, use Flawless Widescreen's Wolf Among Us patch
@@ -20,6 +20,7 @@ The Walking Dead - Michonne | Might crash on startup, cause unknown.
 The Walking Dead - A New Frontier | None found
 The Walking Dead The Final Season | None found
 The Wolf Among Us | None found
+The Walking Dead - The Definitive Series | Played through 100%, works
 
 
 # Todo/Bugs
