@@ -21,6 +21,7 @@ The Walking Dead - A New Frontier | None found
 The Walking Dead The Final Season | None found
 The Wolf Among Us | None found
 The Walking Dead - The Definitive Series | Played through 100%, works
+Game of Thrones - Season 1 | Doesn't work, use Flawless Widescreen's Wolf Among Us patch 
 
 
 # Todo/Bugs
