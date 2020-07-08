@@ -134,7 +134,8 @@
             this.ResolutionBox.FormattingEnabled = true;
             this.ResolutionBox.Items.AddRange(new object[] {
             "2560x1080",
-            "3440x1440"});
+            "3440x1440",
+            "32:9"});
             this.ResolutionBox.Location = new System.Drawing.Point(123, 73);
             this.ResolutionBox.Name = "ResolutionBox";
             this.ResolutionBox.Size = new System.Drawing.Size(139, 21);

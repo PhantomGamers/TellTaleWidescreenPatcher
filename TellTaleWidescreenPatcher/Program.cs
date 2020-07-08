@@ -180,6 +180,10 @@ namespace TellTaleWidescreenPatcher
                 {
                     hexRatio = new byte[] { 0x8E, 0xE3, 0x18, 0x40 };
                 }
+                else if (Form1.GetResolution() == 2)
+                {
+                    hexRatio = new byte[] { 0x39, 0x8E, 0x63, 0x40 };
+                }
 
                 if (fixOffset > 0)
                 {
