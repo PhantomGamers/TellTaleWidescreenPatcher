@@ -1,5 +1,5 @@
 # TellTale Widescreen Patcher
-This program patches your telltale games to run in 21:9! No more "cinematic" black bars all over your screen.  
+This program patches your telltale games to run in ultrawide aspect ratios (21:9 and 32:9)! No more "cinematic" black bars all over your screen.  
 
 # Instructions
 Simply run the program, browse to the executable for your TellTale game, and click Patch!  
@@ -19,7 +19,7 @@ Tales from the Borderlands | Doesn't work, use Flawless Widescreen's Wolf Among 
 The Walking Dead - Michonne | Might crash on startup, cause unknown.
 The Walking Dead - A New Frontier | None found
 The Walking Dead The Final Season | None found
-The Wolf Among Us | None found
+The Wolf Among Us | Doesn't work, use Flawless Widescreen's Wolf Among Us patch 
 The Walking Dead - The Definitive Series | Played through 100%, works
 Game of Thrones - Season 1 | Doesn't work, use Flawless Widescreen's Wolf Among Us patch 
 Sam & Max Save the World Remaster (2020) | None found
@@ -29,7 +29,7 @@ Sam & Max Save the World Remaster (2020) | None found
 Haven't ran into any myself, please report any issues that you find.  
 
 # Dependencies
-* .NET Framework 4.6  
+* .NET Framework 4.8  
 
 # Credits
 * [@mrexodia for the pattern scanning code](https://github.com/mrexodia/PatternFinder)  

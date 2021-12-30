@@ -76,11 +76,15 @@ namespace TellTaleWidescreenPatcher
             form.StatusText.Invoke((MethodInvoker)(() => { form.StatusText.ForeColor = color; }));
         }
 
-        public static int GetResolution()
+        public static string GetResolution()
         {
-            int index = -1;
-            form.StatusText.Invoke((MethodInvoker)(() => { index = form.ResolutionBox.SelectedIndex; }));
-            return index;
+            string resolution = null;
+            form.StatusText.Invoke((MethodInvoker)(() => 
+            { 
+                resolution = form.ResolutionBox.SelectedItem?.ToString();
+            }));
+
+            return resolution;
         }
 
         public static void SetProgress(int value, Color? color = null)
