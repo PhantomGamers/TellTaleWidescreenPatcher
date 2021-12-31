@@ -1,5 +1,5 @@
 # TellTale Widescreen Patcher
-This program patches your telltale games to run in 21:9! No more "cinematic" black bars all over your screen.  
+This program patches your telltale games to run in ultrawide aspect ratios (21:9 and 32:9)! No more "cinematic" black bars all over your screen.  
 
 # Instructions
 Simply run the program, browse to the executable for your TellTale game, and click Patch!  
@@ -29,7 +29,7 @@ Sam & Max Save the World Remaster (2020) | None found
 Haven't ran into any myself, please report any issues that you find.  
 
 # Dependencies
-* .NET Framework 4.6  
+* .NET Framework 4.8  
 
 # Credits
 * [@mrexodia for the pattern scanning code](https://github.com/mrexodia/PatternFinder)  

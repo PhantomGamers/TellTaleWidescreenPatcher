@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
-
 using PatternFinder;
-
 using SharpDisasm;
-
 using Steamless.API.Model;
 using Steamless.API.Services;
 
@@ -172,17 +169,23 @@ namespace TellTaleWidescreenPatcher
                     nop = new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 }; // 8 nops for gog
                 }
                 byte[] hexRatio = { };
-                if (Form1.GetResolution() == 0)
+
+                switch(Form1.GetResolution())
                 {
-                    hexRatio = new byte[] { 0x26, 0xB4, 0x17, 0x40 };
-                }
-                else if (Form1.GetResolution() == 1)
-                {
-                    hexRatio = new byte[] { 0x8E, 0xE3, 0x18, 0x40 };
-                }
-                else if (Form1.GetResolution() == 2)
-                {
-                    hexRatio = new byte[] { 0x39, 0x8E, 0x63, 0x40 };
+                    case "2560x1440":
+                        hexRatio = new byte[] { 0x26, 0xB4, 0x17, 0x40 };
+                        break;
+                    case "3440x1440":
+                        hexRatio = new byte[] { 0x8E, 0xE3, 0x18, 0x40 };
+                        break;
+                    case "3840x1600":
+                        hexRatio = new byte[] { 0x9A, 0x99, 0x19, 0x40 };
+                        break;
+                    case "32:9":
+                        hexRatio = new byte[] { 0x39, 0x8E, 0x63, 0x40 };
+                        break;
+                    default: 
+                        throw new ArgumentOutOfRangeException($"Unknown resolution {Form1.GetResolution()}");
                 }
 
                 if (fixOffset > 0)
@@ -202,7 +205,9 @@ namespace TellTaleWidescreenPatcher
                         Form1.IncrementProgress(1);
                     }
                 }
+
                 Form1.IncrementProgress(1);
+
                 foreach (long l in ratioOffset)
                 {
                     memStream.Seek(l, SeekOrigin.Begin);
@@ -210,12 +215,15 @@ namespace TellTaleWidescreenPatcher
                     memStream.Seek(0, SeekOrigin.Begin);
                     Form1.IncrementProgress(1);
                 }
+
                 Form1.SetStatus("Writing to disk...", System.Drawing.Color.YellowGreen);
+                
                 using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate))
                 {
                     memStream.CopyTo(fs);
                     fs.Flush();
                 }
+
                 Form1.SetStatus("Game patched!", System.Drawing.Color.Green);
             }
         }
