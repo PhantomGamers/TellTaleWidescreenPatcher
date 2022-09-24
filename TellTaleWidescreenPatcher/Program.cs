@@ -175,7 +175,7 @@ namespace TellTaleWidescreenPatcher
 
                 switch(Form1.GetResolution())
                 {
-                    case "2560x1440":
+                    case "2560x1080":
                         hexRatio = new byte[] { 0x26, 0xB4, 0x17, 0x40 };
                         break;
                     case "3440x1440":
