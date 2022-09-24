@@ -126,11 +126,14 @@ namespace TellTaleWidescreenPatcher
                         Console.WriteLine("Checking pattern 3...");
                         if (!Pattern.Find(exe, fixPattern, out fixOffset))
                         {
-                            Console.WriteLine("No pattern detected.");
+                            Console.WriteLine("No fix pattern detected.");
                             fixOffset = 0;
-                            Form1.SetStatus("Error: Fix pattern not found. Executable is not supported.", System.Drawing.Color.Red);
-                            Form1.SetProgress(100, System.Drawing.Color.Red);
-                            return;
+                            if ( MessageBox.Show("No fix detected, apply aspect ratio patch anyway?", "Prompt", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) != DialogResult.Yes)
+                            {
+                                Form1.SetStatus("Error: Fix pattern not found. Executable is not supported.", System.Drawing.Color.Red);
+                                Form1.SetProgress(100, System.Drawing.Color.Red);
+                                return;
+                            }
                         }
                     }
                 }
@@ -148,7 +151,7 @@ namespace TellTaleWidescreenPatcher
             }
             Form1.IncrementProgress(1);
             Console.WriteLine("Ratio offsets found: " + ratioOffsets.Count);
-            if (ratioOffsets.Count > 0 && (fixOffset > 0 || fixOffsets.Count > 0))
+            if (ratioOffsets.Count > 0)
             {
                 Form1.SetStatus("Offsets found, patching game...", System.Drawing.Color.YellowGreen);
                 PatchFile(exe, ratioOffsets, path, fixOffset, fixOffsets, nops);
