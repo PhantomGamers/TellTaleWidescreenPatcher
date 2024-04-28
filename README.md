@@ -22,7 +22,7 @@ Tales from the Borderlands | Doesn't work, use Flawless Widescreen's Wolf Among 
 The Walking Dead - Michonne | Might crash on startup, cause unknown.
 The Walking Dead - A New Frontier | None found
 The Walking Dead The Final Season | None found
-The Wolf Among Us | None found
+The Wolf Among Us | No longer works after an update, use [SUWSF Patch](https://github.com/PhantomGamers/TellTaleWidescreenPatcher/files/15126502/The.Wolf.Among.Us.SUWSF.v2.zip) or Flawless Widescreen
 The Walking Dead - The Definitive Series | Played through 100%, works
 Game of Thrones - Season 1 | Doesn't work, use Flawless Widescreen's Wolf Among Us patch
 Sam & Max Save the World Remaster (2020) | None found
