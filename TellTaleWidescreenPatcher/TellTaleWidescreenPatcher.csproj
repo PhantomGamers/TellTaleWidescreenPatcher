@@ -5,15 +5,8 @@
         <UseWindowsForms>true</UseWindowsForms>
         <Version>1.7.0</Version>
         <Configurations>Debug;Release;ReleaseNoEmbeds</Configurations>
-        <Platforms>AnyCPU</Platforms>
         <LangVersion>preview</LangVersion>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <RunCodeAnalysis>false</RunCodeAnalysis>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NoEmbeds|AnyCPU'">
-        <OutputPath>bin\NoEmbeds\</OutputPath>
-        <Optimize>true</Optimize>
+        <PlatformTarget>x86</PlatformTarget>
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="SharpDisasm">
