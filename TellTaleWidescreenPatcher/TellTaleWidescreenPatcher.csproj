@@ -1,62 +1,63 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
-    <OutputType>WinExe</OutputType>
-    <UseWindowsForms>true</UseWindowsForms>
-    <Version>1.7.0</Version>
-    <Configurations>Debug;Release;ReleaseNoEmbeds</Configurations>
-    <Platforms>AnyCPU</Platforms>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NoEmbeds|AnyCPU'">
-    <OutputPath>bin\NoEmbeds\</OutputPath>
-    <Optimize>true</Optimize>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="SharpDisasm">
-      <HintPath>precompiled\SharpDisasm.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Steamless.API">
-      <HintPath>precompiled\Steamless.API.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Steamless.Unpacker.Variant20.x86">
-      <HintPath>precompiled\Steamless.Unpacker.Variant20.x86.dll</HintPath>
-    </Reference>
-    <Reference Include="Steamless.Unpacker.Variant31.x64">
-      <HintPath>precompiled\Steamless.Unpacker.Variant31.x64.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Steamless.Unpacker.Variant31.x86">
-      <HintPath>precompiled\Steamless.Unpacker.Variant31.x86.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.34" Condition="$(Configuration) == 'ReleaseNoEmbeds'">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="System.DirectoryServices" Version="8.0.0" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
-  </ItemGroup>
-  
+    <PropertyGroup>
+        <TargetFramework>net48</TargetFramework>
+        <OutputType>WinExe</OutputType>
+        <UseWindowsForms>true</UseWindowsForms>
+        <Version>1.7.0</Version>
+        <Configurations>Debug;Release;ReleaseNoEmbeds</Configurations>
+        <Platforms>AnyCPU</Platforms>
+        <LangVersion>preview</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <RunCodeAnalysis>false</RunCodeAnalysis>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NoEmbeds|AnyCPU'">
+        <OutputPath>bin\NoEmbeds\</OutputPath>
+        <Optimize>true</Optimize>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="SharpDisasm">
+            <HintPath>precompiled\SharpDisasm.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="Steamless.API">
+            <HintPath>precompiled\Steamless.API.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="Steamless.Unpacker.Variant20.x86">
+            <HintPath>precompiled\Steamless.Unpacker.Variant20.x86.dll</HintPath>
+        </Reference>
+        <Reference Include="Steamless.Unpacker.Variant31.x64">
+            <HintPath>precompiled\Steamless.Unpacker.Variant31.x64.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="Steamless.Unpacker.Variant31.x86">
+            <HintPath>precompiled\Steamless.Unpacker.Variant31.x86.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
+            <Visible>False</Visible>
+            <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
+            <Install>true</Install>
+        </BootstrapperPackage>
+        <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+            <Visible>False</Visible>
+            <ProductName>.NET Framework 3.5 SP1</ProductName>
+            <Install>false</Install>
+        </BootstrapperPackage>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.34" Condition="$(Configuration) == 'ReleaseNoEmbeds'">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.CSharp" Version="4.7.0"/>
+        <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0"/>
+        <PackageReference Include="System.DirectoryServices" Version="8.0.0"/>
+    </ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all"/>
+    </ItemGroup>
+
 </Project>

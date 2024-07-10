@@ -1,135 +1,135 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace TellTaleWidescreenPatcher
+#endregion
+
+namespace TellTaleWidescreenPatcher;
+
+public partial class Form1 : Form
 {
-    public partial class Form1 : Form
+    private static Form1 _form;
+
+    public Form1()
     {
-        public Form1()
+        InitializeComponent();
+        var ver = Assembly.GetEntryAssembly()?.GetName().Version;
+        Text += " v" + ver.Major + "." + ver.Minor + (ver.Build.ToString() == "0" ? "" : "." + ver.Build);
+        AllowDrop = true;
+        DragEnter += Form1_DragEnter;
+        DragDrop += Form1_DragDrop;
+        _form = this;
+    }
+
+    private void BrowseButton_Click(object sender, EventArgs e)
+    {
+        // Show the dialog that allows user to select a file, the
+        // call will result a value from the DialogResult enum
+        // when the dialog is dismissed.
+        var dlg = new OpenFileDialog
         {
-            InitializeComponent();
-            Version ver = Assembly.GetEntryAssembly().GetName().Version;
-            this.Text = this.Text + " v" + ver.Major + "." + ver.Minor + (ver.Build.ToString() == "0" ? "" : "."+ver.Build.ToString());
-            this.AllowDrop = true;
-            this.DragEnter += new DragEventHandler(Form1_DragEnter);
-            this.DragDrop += new DragEventHandler(Form1_DragDrop);
-            form = this;
-        }
+            Filter = "TellTale Game Executable|*.exe"
+        };
+        var result = dlg.ShowDialog();
+        // if a file is selected
+        if (result != DialogResult.OK) return;
+        // Set the selected file URL to the textbox
+        PathBox.Text = dlg.FileName;
 
-        private void BrowseButton_Click(object sender, EventArgs e)
+        // Change status
+        CheckStatus();
+    }
+
+    private void PathBox_TextChanged(object sender, EventArgs e)
+    {
+        CheckStatus();
+    }
+
+    private void ResolutionBox_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        CheckStatus();
+        Console.WriteLine(ResolutionBox.SelectedIndex);
+    }
+
+    private void CheckStatus()
+    {
+        if (File.Exists(PathBox.Text) && Path.GetExtension(PathBox.Text) == ".exe" && ResolutionBox.SelectedItem != null)
         {
-            // Show the dialog that allows user to select a file, the
-            // call will result a value from the DialogResult enum
-            // when the dialog is dismissed.
-            OpenFileDialog dlg = new OpenFileDialog
-            {
-                Filter = "TellTale Game Executable|*.exe"
-            };
-            DialogResult result = dlg.ShowDialog();
-            // if a file is selected
-            if (result == DialogResult.OK)
-            {
-                // Set the selected file URL to the textbox
-                this.PathBox.Text = dlg.FileName;
-
-                // Change status
-                CheckStatus();
-            }
+            StatusText.Text = "Found executable!";
+            StatusText.ForeColor = Color.YellowGreen;
+            PatchButton.Enabled = true;
+            progressBar1.Value = 0;
         }
-
-        private void PathBox_TextChanged(object sender, EventArgs e)
+        else
         {
-            CheckStatus();
+            StatusText.Text = "Waiting...";
+            StatusText.ForeColor = Color.Blue;
+            PatchButton.Enabled = false;
+            progressBar1.Value = 0;
         }
+    }
 
-        private void ResolutionBox_SelectedIndexChanged(object sender, EventArgs e)
+    public static void SetStatus(string status, Color color)
+    {
+        _form.StatusText.Invoke((MethodInvoker)(() => { _form.StatusText.Text = status; }));
+        _form.StatusText.Invoke((MethodInvoker)(() => { _form.StatusText.ForeColor = color; }));
+    }
+
+    public static string GetResolution()
+    {
+        string resolution = null;
+        _form.StatusText.Invoke((MethodInvoker)(() =>
         {
-            CheckStatus();
-            Console.WriteLine(ResolutionBox.SelectedIndex);
-        }
+            resolution = _form.ResolutionBox.SelectedItem?.ToString();
+        }));
 
-        public void CheckStatus()
+        return resolution;
+    }
+
+    public static void SetProgress(int value, Color? color = null)
+    {
+        _form.progressBar1.Invoke((MethodInvoker)(() => { _form.progressBar1.Value = value; }));
+        _form.progressBar1.Invoke((MethodInvoker)(() =>
         {
-            if (File.Exists(this.PathBox.Text) && Path.GetExtension(this.PathBox.Text) == ".exe" && ResolutionBox.SelectedItem != null)
-            {
-                this.StatusText.Text = "Found executable!";
-                this.StatusText.ForeColor = Color.YellowGreen;
-                this.PatchButton.Enabled = true;
-                this.progressBar1.Value = 0;
-            }
-            else
-            {
-                this.StatusText.Text = "Waiting...";
-                this.StatusText.ForeColor = Color.Blue;
-                this.PatchButton.Enabled = false;
-                this.progressBar1.Value = 0;
-            }
-        }
+            _form.progressBar1.ForeColor = color.GetValueOrDefault(Color.Green);
+        }));
+    }
 
-        public static void SetStatus(string status, Color color)
-        {
-            form.StatusText.Invoke((MethodInvoker)(() => { form.StatusText.Text = status; }));
-            form.StatusText.Invoke((MethodInvoker)(() => { form.StatusText.ForeColor = color; }));
-        }
+    public static void IncrementProgress(int value)
+    {
+        _form.progressBar1.Invoke((MethodInvoker)(() => { _form.progressBar1.Increment(value); }));
+    }
 
-        public static string GetResolution()
-        {
-            string resolution = null;
-            form.StatusText.Invoke((MethodInvoker)(() => 
-            { 
-                resolution = form.ResolutionBox.SelectedItem?.ToString();
-            }));
+    private void PatchButton_Click(object sender, EventArgs e)
+    {
+        if (PatchWorker.IsBusy) return;
+        PatchButton.Enabled = false;
+        PatchWorker.RunWorkerAsync();
+    }
 
-            return resolution;
-        }
+    private void PatchWorker_DoWork(object sender, DoWorkEventArgs e)
+    {
+        Program.PatchFunction(PathBox.Text);
+        SetProgress(100);
+        _form.PatchButton.Invoke((MethodInvoker)(() => { _form.PatchButton.Enabled = true; }));
+    }
 
-        public static void SetProgress(int value, Color? color = null)
-        {
-            form.progressBar1.Invoke((MethodInvoker)(() => { form.progressBar1.Value = value; }));
-            form.progressBar1.Invoke((MethodInvoker)(() => { form.progressBar1.ForeColor = color.GetValueOrDefault(Color.Green); }));
-        }
+    private static void Form1_DragEnter(object sender, DragEventArgs e)
+    {
+        if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
+        var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+        if (files.Length == 1 && Path.GetExtension(files[0]) == ".exe")
+            e.Effect = DragDropEffects.Copy;
+    }
 
-        public static void IncrementProgress(int value)
-        {
-            form.progressBar1.Invoke((MethodInvoker)(() => { form.progressBar1.Increment(value); }));
-        }
-
-        private static Form1 form = null;
-
-        private void PatchButton_Click(object sender, EventArgs e)
-        {
-            if (!PatchWorker.IsBusy)
-            {
-                PatchButton.Enabled = false;
-                PatchWorker.RunWorkerAsync();
-            }
-        }
-
-        private void PatchWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            Program.PatchFunction(this.PathBox.Text);
-            SetProgress(100);
-            form.PatchButton.Invoke((MethodInvoker)(() => { form.PatchButton.Enabled = true; }));
-        }
-
-        private void Form1_DragEnter(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                if (files.Length == 1 && Path.GetExtension(files[0]) == ".exe")
-                    e.Effect = DragDropEffects.Copy;
-            }
-        }
-
-        private void Form1_DragDrop(object sender, DragEventArgs e)
-        {
-            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            this.PathBox.Text = files[0];
-        }
+    private void Form1_DragDrop(object sender, DragEventArgs e)
+    {
+        var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+        PathBox.Text = files[0];
     }
 }
