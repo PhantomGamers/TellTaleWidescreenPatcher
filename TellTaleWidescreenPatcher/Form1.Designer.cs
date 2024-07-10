@@ -136,7 +136,9 @@
             "2560x1080",
             "3440x1440",
             "3840x1600",
-            "32:9"});
+            "32:9",
+            "16:10"
+            });
             this.ResolutionBox.Location = new System.Drawing.Point(123, 73);
             this.ResolutionBox.Name = "ResolutionBox";
             this.ResolutionBox.Size = new System.Drawing.Size(139, 21);
