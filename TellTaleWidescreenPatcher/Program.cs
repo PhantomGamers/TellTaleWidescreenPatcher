@@ -165,20 +165,38 @@ internal static class Program
         PatchFile(exe, ratioOffsets, path, fixOffset, fixOffsets, nops);
     }
 
+    private static byte[] GetRatioBytes()
+    {
+        var resolution = Form1.GetResolution();
+        float aspectRatio;
+
+        if (resolution.Contains("x"))
+        {
+            var parts = resolution.Split('x');
+            aspectRatio = float.Parse(parts[0]) / float.Parse(parts[1]);
+        }
+        else if (resolution.Contains(":"))
+        {
+            var parts = resolution.Split(':');
+            aspectRatio = float.Parse(parts[0]) / float.Parse(parts[1]);
+        }
+        else
+        {
+            throw new ArgumentOutOfRangeException($"Unknown resolution format {resolution}");
+        }
+
+        return BitConverter.GetBytes(aspectRatio);
+    }
+
     private static void PatchFile(byte[] exe, List<long> ratioOffset, string path, long fixOffset = 0,
         List<long> fixOffsets = null, int nops = 8)
     {
         using var memStream = new MemoryStream(exe);
         var nop = Enumerable.Repeat((byte)0x90, nops).ToArray(); // 8 for gog, 6 otherwise
 
-        var hexRatio = Form1.GetResolution() switch
-        {
-            "2560x1080" => [0x26, 0xB4, 0x17, 0x40],
-            "3440x1440" => [0x8E, 0xE3, 0x18, 0x40],
-            "3840x1600" => [0x9A, 0x99, 0x19, 0x40],
-            "32:9" => new byte[] { 0x39, 0x8E, 0x63, 0x40 },
-            _ => throw new ArgumentOutOfRangeException($"Unknown resolution {Form1.GetResolution()}")
-        };
+        var hexRatio = GetRatioBytes();
+
+        Console.WriteLine(hexRatio);
 
         if (fixOffset > 0)
         {
