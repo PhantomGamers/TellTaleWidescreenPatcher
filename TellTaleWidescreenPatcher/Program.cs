@@ -7,10 +7,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using SharpDisasm;
 using Steamless.API.Model;
 using Steamless.API.Services;
-using Steamless.Unpacker.Variant31.x64;
 
 #endregion
 
@@ -31,10 +29,10 @@ internal static class Program
         Application.Run(new Form1());
         var dependencies = new List<Type>
         {
-            typeof(Main),
+            typeof(Steamless.Unpacker.Variant31.x64.Main),
             typeof(Steamless.Unpacker.Variant31.x86.Main),
-            typeof(SteamlessOptions),
-            typeof(Vendor)
+            typeof(Steamless.API.SteamlessEvents),
+            typeof(SharpDisasm.Vendor)
         };
 
         foreach (var requiredDllPath in dependencies
@@ -242,7 +240,7 @@ internal static class Program
 
     private static bool IsSteamFile64(string file)
     {
-        var m = new Main();
+        var m = new Steamless.Unpacker.Variant31.x64.Main();
         m.Initialize(MLoggingService);
         return m.CanProcessFile(file);
     }
@@ -271,7 +269,7 @@ internal static class Program
             DumpSteamDrmpToDisk = false
         };
 
-        var m = new Main();
+        var m = new Steamless.Unpacker.Variant31.x64.Main();
         m.Initialize(MLoggingService);
         return m.ProcessFile(file, s);
     }
