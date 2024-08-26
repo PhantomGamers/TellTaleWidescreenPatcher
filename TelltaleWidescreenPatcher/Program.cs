@@ -12,7 +12,7 @@ using Steamless.API.Services;
 
 #endregion
 
-namespace TellTaleWidescreenPatcher;
+namespace TelltaleWidescreenPatcher;
 
 internal static class Program
 {

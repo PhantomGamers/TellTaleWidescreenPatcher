@@ -6,7 +6,7 @@ using System.Text;
 
 #endregion
 
-namespace TellTaleWidescreenPatcher;
+namespace TelltaleWidescreenPatcher;
 
 public static class Pattern
 {

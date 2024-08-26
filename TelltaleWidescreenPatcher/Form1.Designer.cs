@@ -1,4 +1,4 @@
-﻿namespace TellTaleWidescreenPatcher
+﻿namespace TelltaleWidescreenPatcher
 {
     partial class Form1
     {
@@ -50,7 +50,7 @@
             this.TitleLabel.Name = "TitleLabel";
             this.TitleLabel.Size = new System.Drawing.Size(284, 13);
             this.TitleLabel.TabIndex = 0;
-            this.TitleLabel.Text = "TellTale Widescreen Patcher by PhantomGamers";
+            this.TitleLabel.Text = "Telltale Widescreen Patcher by PhantomGamers";
             // 
             // DescriptionLabel
             // 
@@ -59,7 +59,7 @@
             this.DescriptionLabel.Name = "DescriptionLabel";
             this.DescriptionLabel.Size = new System.Drawing.Size(253, 13);
             this.DescriptionLabel.TabIndex = 1;
-            this.DescriptionLabel.Text = "Patch your TellTale games to work on 21:9 displays.";
+            this.DescriptionLabel.Text = "Patch your Telltale games to work on 16:10, 21:9, and 32:9 displays.";
             // 
             // GameExecutableLabel
             // 
@@ -174,7 +174,7 @@
             this.Controls.Add(this.DescriptionLabel);
             this.Controls.Add(this.TitleLabel);
             this.Name = "Form1";
-            this.Text = "TellTale Widescreen Patcher";
+            this.Text = "Telltale Widescreen Patcher";
             this.ResumeLayout(false);
             this.PerformLayout();
 

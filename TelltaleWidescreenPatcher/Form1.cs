@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 #endregion
 
-namespace TellTaleWidescreenPatcher;
+namespace TelltaleWidescreenPatcher;
 
 public partial class Form1 : Form
 {
@@ -33,7 +33,7 @@ public partial class Form1 : Form
         // when the dialog is dismissed.
         var dlg = new OpenFileDialog
         {
-            Filter = "TellTale Game Executable|*.exe"
+            Filter = "Telltale Game|*.exe"
         };
         var result = dlg.ShowDialog();
         // if a file is selected
