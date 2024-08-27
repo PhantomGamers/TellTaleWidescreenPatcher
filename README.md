@@ -17,26 +17,27 @@ from (GOG/Steam).
 
  Game Name                                        | Issues                                                                                                                                                                              
 --------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
- Batman: The Telltale Series                      | Black bars, [use Rose's Fix as well as this](https://community.pcgamingwiki.com/files/file/1729-batman-the-telltale-series-no-letterbox/)                                           
- Batman: The Enemy Within                         | Played through 100%, works                                                                                                                                                          
- Guardians of the Galaxy: The Telltale Series     | Played through 100%, works                                                                                                                                                          
- Minecraft: Story Mode                            | Doesn't work, use Flawless Widescreen's The Wolf Among Us patch                                                                                                                         
- Minecraft: Story Mode - Season Two               | None found                                                                                                                                                                          
- Tales from the Borderlands                       | Doesn't work, use Flawless Widescreen's The Wolf Among Us patch                                                                                                                         
- The Walking Dead: Michonne                       | Might crash on startup, cause unknown.                                                                                                                                              
- The Walking Dead: A New Frontier                 | None found                                                                                                                                                                          
- The Walking Dead: The Final Season               | None found                                                                                                                                                                          
- The Wolf Among Us                                | No longer works after an update, use [SUWSF Patch](https://github.com/PhantomGamers/TellTaleWidescreenPatcher/files/15126502/The.Wolf.Among.Us.SUWSF.v2.zip) or Flawless Widescreen 
- The Walking Dead: The Telltale Definitive Series | Played through 100%, works                                                                                                                                                          
- Game of Thrones                                  | Doesn't work, use Flawless Widescreen's The Wolf Among Us patch                                                                                                                         
- Sam & Max: Save the World (Remastered)           | None found                                                            
+ Batman: The Telltale Series                      | Black bars, [use Rose's Fix as well as this](https://community.pcgamingwiki.com/files/file/1729-batman-the-telltale-series-no-letterbox/)
+ Batman: The Enemy Within                         | Played through 100%, works
+ Guardians of the Galaxy: The Telltale Series     | Played through 100%, works
+ Jurassic Park: The Game                          | None found (credit to @RoseTheFlower for adding support)
+ Minecraft: Story Mode                            | Doesn't work, use Flawless Widescreen's The Wolf Among Us patch
+ Minecraft: Story Mode - Season Two               | None found
+ Tales from the Borderlands                       | Doesn't work, use Flawless Widescreen's The Wolf Among Us patch
+ The Walking Dead: Michonne                       | Might crash on startup, cause unknown.
+ The Walking Dead: A New Frontier                 | None found
+ The Walking Dead: The Final Season               | None found
+ The Wolf Among Us                                | No longer works after an update, use [SUWSF Patch](https://github.com/PhantomGamers/TellTaleWidescreenPatcher/files/15126502/The.Wolf.Among.Us.SUWSF.v2.zip) or Flawless Widescreen
+ The Walking Dead: The Telltale Definitive Series | Played through 100%, works
+ Game of Thrones                                  | Doesn't work, use Flawless Widescreen's The Wolf Among Us patch
+ Sam & Max: Save the World (Remastered)           | None found
  Sam & Max: Beyond Time and Space (Remastered)    | None found
  Sam & Max: The Devil's Playhouse (Remastered)    | None found
  Tales of Monkey Island                           | None found
 
-## Todo/Bugs
+## Todo
 
-Haven't ran into any myself, please report any issues that you find.
+Allow custom input for AR/Resolution values
 
 ## Dependencies
 
