@@ -1,4 +1,3 @@
-[//]: # "why tf is the second T in Telltale capital"
 # Telltale Widescreen Patcher
 
 This program patches your Telltale games to run in ultrawide aspect ratios (16:10, 21:9, and 32:9)! No more "cinematic" black
@@ -13,7 +12,7 @@ from (GOG/Steam).
 **Make sure you run the game and select your resolution before patching.**
 
 ## Tested Titles
-[//]: # "really need to add/test more games here, i.e. the exapanse, twd 1 & 2, poker night 1 & 2, bttf, strong bad's cgfap, etc, unless this patch doesnt work on them, idk I have a normal 16:9 screen, Jurassic park def tho, I can see the patch in the code so that must mean it works right?"
+[//]: # "really need to add/test more games here, i.e. the exapanse, twd 1 & 2, poker night 1 & 2, bttf, strong bad's cgfap, etc, unless this patch doesnt work on them, idk I have a normal 16:9 screen"
 
  Game Name                                        | Issues                                                                                                                                                                              
 --------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
