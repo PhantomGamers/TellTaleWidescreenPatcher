@@ -1,9 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net48</TargetFramework>
         <OutputType>WinExe</OutputType>
         <UseWindowsForms>true</UseWindowsForms>
-        <Version>1.7.1</Version>
+        <Version>1.7.0</Version>
         <Configurations>Debug;Release;ReleaseNoEmbeds</Configurations>
         <LangVersion>preview</LangVersion>
         <PlatformTarget>x86</PlatformTarget>
