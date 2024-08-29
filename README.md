@@ -22,6 +22,7 @@ from (GOG/Steam).
  Minecraft: Story Mode                            | Doesn't work, use Flawless Widescreen's The Wolf Among Us patch
  Minecraft: Story Mode - Season Two               | None found
  Tales from the Borderlands                       | Doesn't work, use Flawless Widescreen's The Wolf Among Us patch
+ The Expanse: A Telltale Series                   | Doesn't work (uses Unreal Engine, not Telltale Tool), use [Rose's patch](https://github.com/RoseTheFlower/UltrawideIndex/releases/tag/expanse)
  The Walking Dead: Michonne                       | Might crash on startup, cause unknown.
  The Walking Dead: A New Frontier                 | None found
  The Walking Dead: The Final Season               | None found
